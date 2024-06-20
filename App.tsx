@@ -18,6 +18,8 @@ import {
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {ButtonComponent} from './components/ButtonComponent';
+import {CounterComponent} from './components/CounterComponent';
 
 function App(): React.JSX.Element {
   const [counter, setCounter] = React.useState(0);
@@ -46,17 +48,21 @@ function App(): React.JSX.Element {
             alignItems: 'center',
           }}>
           <View style={styles.button}>
-            <Button
-              onPress={() => setCounter(counter + 1)}
-              title="Increment"></Button>
+            <ButtonComponent
+              press={() => setCounter(counter + 1)}
+              title="increment"
+            />
           </View>
-          <Text style={styles.counter}>{counter}</Text>
+          <CounterComponent counter={counter} />
           <View style={styles.button}>
-            <Button onPress={() => setCounter(counter - 1)} title="Decrement" />
+            <ButtonComponent
+              press={() => setCounter(counter - 1)}
+              title="decrement"
+            />
           </View>
         </View>
         <View style={styles.container}>
-          <Button onPress={() => setCounter(0)} title="Reset" />
+          <ButtonComponent title="Reset" press={() => setCounter(0)} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -83,14 +89,9 @@ const styles = StyleSheet.create({
   button: {
     width: 100,
   },
-  counter: {
-    fontSize: 30,
-    color: 'black',
-    fontWeight: 'bold',
-  },
   container: {
     paddingHorizontal: 100,
-  }
+  },
 });
 
 export default App;
