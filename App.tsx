@@ -15,6 +15,9 @@ import {
   useColorScheme,
   View,
   Button,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -24,6 +27,15 @@ import {CounterComponent} from './components/CounterComponent';
 function App(): React.JSX.Element {
   const [counter, setCounter] = React.useState(0);
   const isDarkMode = useColorScheme() === 'dark';
+
+  const handleChange = (event: any) => {
+    const inputText = event.nativeEvent.text;
+    if (!isNaN(inputText) && inputText !== '') {
+      setCounter(parseInt(inputText, 10));
+    } else {
+      setCounter(0);
+    }
+  };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -38,6 +50,10 @@ function App(): React.JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
+        <TextInput
+          style={styles.input}
+          inputMode="numeric"
+          onChange={handleChange}></TextInput>
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.transparent,
@@ -61,9 +77,11 @@ function App(): React.JSX.Element {
             />
           </View>
         </View>
-        <View style={styles.container}>
-          <ButtonComponent title="Reset" press={() => setCounter(0)} />
-        </View>
+        {counter != 0 && (
+          <View style={styles.container}>
+            <ButtonComponent title="Reset" press={() => setCounter(0)} />
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -77,6 +95,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
+  },
+  input: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    height: 40,
+    margin: 12,
+    backgroundColor: 'white',
   },
   sectionDescription: {
     marginTop: 8,
