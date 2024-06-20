@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -15,48 +14,28 @@ import {
   Text,
   useColorScheme,
   View,
+  Button,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {ButtonComponent} from './components/ButtonComponent';
+import {CounterComponent} from './components/CounterComponent';
 
 function App(): React.JSX.Element {
+  const [counter, setCounter] = React.useState(0);
   const isDarkMode = useColorScheme() === 'dark';
+
+  const handleChange = (event: any) => {
+    const inputText = event.nativeEvent.text;
+    if (!isNaN(inputText) && inputText !== '') {
+      setCounter(parseInt(inputText, 10));
+    } else {
+      setCounter(0);
+    }
+  };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -71,26 +50,38 @@ function App(): React.JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
+        <TextInput
+          style={styles.input}
+          inputMode="numeric"
+          onChange={handleChange}></TextInput>
         <View
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            backgroundColor: isDarkMode ? Colors.black : Colors.transparent,
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginTop: 20,
+            alignItems: 'center',
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <View style={styles.button}>
+            <ButtonComponent
+              press={() => setCounter(counter + 1)}
+              title="increment"
+            />
+          </View>
+          <CounterComponent counter={counter} />
+          <View style={styles.button}>
+            <ButtonComponent
+              press={() => setCounter(counter - 1)}
+              title="decrement"
+            />
+          </View>
         </View>
+        {counter != 0 && (
+          <View style={styles.container}>
+            <ButtonComponent title="Reset" press={() => setCounter(0)} />
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -105,6 +96,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
   },
+  input: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    height: 40,
+    margin: 12,
+    backgroundColor: 'white',
+  },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
@@ -112,6 +110,12 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  button: {
+    width: 100,
+  },
+  container: {
+    paddingHorizontal: 100,
   },
 });
 
