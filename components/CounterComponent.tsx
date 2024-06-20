@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 type CounterProps = {
   counter: number;
 };
 
 export const CounterComponent = (props: CounterProps) => {
-  return <Text style={styles.counter}>{props.counter}</Text>;
+    return <Text style={styles.counter}>{props.counter}</Text>;
 };
 
 const styles = StyleSheet.create({
